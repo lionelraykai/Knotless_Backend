@@ -28,7 +28,8 @@ export const getKnot = async (req, res) => {
     try {
         const knot = await Knot.findById(req.params.id)
             .populate('author', 'name avatar')
-            .populate('solutions.user', 'name avatar');
+            .populate('solutions.user', 'name avatar')
+            .populate('solutions.replies.user', 'name avatar');
 
         if (!knot) {
             return res.status(404).json({ message: 'Knot not found' });
@@ -225,6 +226,41 @@ export const voteSolution = async (req, res) => {
 
         await knot.save();
         res.status(200).json(knot);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Add a reply to a solution
+// @route   POST /api/knots/:id/solutions/:solutionId/reply
+// @access  Private
+export const addSolutionReply = async (req, res) => {
+    try {
+        const { content } = req.body;
+        const knot = await Knot.findById(req.params.id);
+
+        if (!knot) {
+            return res.status(404).json({ message: 'Knot not found' });
+        }
+
+        const solution = knot.solutions.id(req.params.solutionId);
+
+        if (!solution) {
+            return res.status(404).json({ message: 'Solution not found' });
+        }
+
+        const newReply = {
+            user: req.user.id,
+            content
+        };
+
+        solution.replies.push(newReply);
+        await knot.save();
+
+        // Repopulate to return with user data
+        await knot.populate('solutions.replies.user', 'name avatar');
+
+        res.status(201).json(knot);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

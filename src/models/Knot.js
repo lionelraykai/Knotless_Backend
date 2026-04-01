@@ -70,6 +70,20 @@ const KnotSchema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'User'
         }],
+        replies: [{
+            user: {
+                type: mongoose.Schema.ObjectId,
+                ref: 'User'
+            },
+            content: {
+                type: String,
+                required: true
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            }
+        }],
         createdAt: {
             type: Date,
             default: Date.now

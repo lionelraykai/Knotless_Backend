@@ -8,7 +8,8 @@ import {
     downvoteKnot,
     addSolution,
     markSolutionCorrect,
-    voteSolution
+    voteSolution,
+    addSolutionReply
 } from '../controllers/knotController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -20,5 +21,6 @@ router.post('/:id/downvote', protect, downvoteKnot);
 router.post('/:id/solutions', protect, addSolution);
 router.patch('/:id/solutions/:solutionId/correct', protect, markSolutionCorrect);
 router.patch('/:id/solutions/:solutionId/vote', protect, voteSolution);
+router.post('/:id/solutions/:solutionId/reply', protect, addSolutionReply);
 
 export default router;
