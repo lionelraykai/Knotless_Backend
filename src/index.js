@@ -6,6 +6,8 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import knotRoutes from './routes/knotRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
+import draftRoutes from './routes/draftRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -24,6 +26,8 @@ app.use(morgan('dev'));
 app.use('/api/auth', authRoutes);
 app.use('/api/knots', knotRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/drafts', draftRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {
